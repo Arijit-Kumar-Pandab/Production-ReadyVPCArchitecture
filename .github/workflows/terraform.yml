@@ -1,0 +1,65 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  id-token: write        # Required for OIDC
+  contents: read
+
+env:
+  AWS_REGION: us-east-2
+
+jobs:
+  terraform:
+    name: Terraform Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # Configure AWS credentials using OIDC
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::838532140350:role/terraform-github-policy
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Terraform Init
+      - name: Terraform Init
+        run: terraform init
+
+      # Terraform Format Check
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      # Terraform Validate
+      - name: Terraform Validate
+        run: terraform validate
+
+      # Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      # Manual Approval (Only on main branch)
+      - name: Manual Approval
+        if: github.ref == 'refs/heads/main'
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: Arijit-Kumar-Pandab
+
+      # Terraform Apply
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
