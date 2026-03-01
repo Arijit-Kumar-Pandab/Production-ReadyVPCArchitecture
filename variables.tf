@@ -16,3 +16,12 @@ variable "vpc_cidr_blocl" {
 variable "vpc_name" {
   description = "VPC Name"
 }
+
+variable "subnets" {
+  description = "Subnet config"
+  type = map(object({
+    cidr = string
+    az = string
+    type = string
+  }))
+}
