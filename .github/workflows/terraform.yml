@@ -3,7 +3,7 @@ name: Terraform Infra CI/CD
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
 
 permissions:
