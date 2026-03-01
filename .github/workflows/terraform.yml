@@ -51,15 +51,7 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      # Manual Approval (Only on main branch)
-      - name: Manual Approval
-        if: github.ref == 'refs/heads/main'
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: Arijit-Kumar-Pandab
-
       # Terraform Apply
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         run: terraform apply -auto-approve tfplan
