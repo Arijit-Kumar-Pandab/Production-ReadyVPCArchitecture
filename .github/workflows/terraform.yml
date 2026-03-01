@@ -54,4 +54,4 @@ jobs:
       # Terraform Apply
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
-        run: terraform apply -auto-approve tfplan
+        run: terraform destroy -auto-approve
