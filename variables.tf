@@ -7,17 +7,17 @@ variable "region" {
 variable "aws_version" {
   description = "AWS Provider Version"
   type        = string
-  default = "6.32.1"
+  default     = "6.32.1"
 }
 
 variable "vpc_cidr_blocl" {
   description = "VPC CIDR Block"
-  default = "10.0.0.0/16"
+  default     = "10.0.0.0/16"
 }
 
 variable "vpc_name" {
   description = "VPC Name"
-  default = "production-ready-vpc"
+  default     = "production-ready-vpc"
 }
 
 variable "subnets" {
